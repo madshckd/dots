@@ -1,4 +1,7 @@
-" custom rules and specifications - neovim
+" This line makes pacman-installed global Arch Linux vim packages work.
+source /usr/share/nvim/archlinux.vim
+
+" custom rules and specifications 
 " carefully handpicked by z31a
 
 syntax on                   " syntax highlighting
@@ -32,11 +35,11 @@ filetype plugin on
 filetype plugin indent on   " allow auto-indenting depending on file type
 
 " plugin customisation
-
 call plug#begin('/usr/share/nvim/runtime/autoload')
 
 " nord theme plugin
 Plug 'shaunsingh/nord.nvim'     
+
 " snippets
 Plug 'honza/vim-snippets'
 Plug 'SirVer/ultisnips'
@@ -52,12 +55,13 @@ Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 
+" autosave plugin
+Plug 'okuuva/auto-save.nvim'
 call plug#end()
-
 " plugin specific customisation
 
 " theme
-colorscheme nord
+" colorscheme nord
 
 " configs written using 'lua'
 " comprises configurations for :
@@ -154,6 +158,9 @@ require('lspconfig')['html'].setup {
 require('lspconfig')['gopls'].setup {
     capabilities = capabilities
 }
+
+-- auto-save plugin
+require('auto-save').setup {}
 
 -- nvim-cmp config ends
 EOF
