@@ -1,5 +1,5 @@
 " This line makes pacman-installed global Arch Linux vim packages work.
-source /usr/share/nvim/archlinux.vim
+" source /usr/share/nvim/archlinux.vim
 
 " custom rules and specifications 
 " carefully handpicked by z31a
