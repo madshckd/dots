@@ -1,8 +1,15 @@
 " This line makes pacman-installed global Arch Linux vim packages work.
 " source /usr/share/nvim/archlinux.vim
 
-" custom rules and specifications 
+" custom rules and specifications (not too shabby but it is minimal and working for me ofcourse)
+" minimal ide setup for go programming
 " carefully handpicked by z31a
+
+" plugin manager used : vim-plug
+" download vim-plug and place it in /usr/share/nvim/runtime/autoload directory
+
+" if you're trying to setup user specific configuration then remove the path in call plug#begin() function
+" if you have administrator access then, leave it as it is
 
 syntax on                   " syntax highlighting
 set nocompatible            " disable compatibility to old-time vi
@@ -11,7 +18,7 @@ set ignorecase              " case insensitive
 set mouse=v                 " middle-click paste with 
 set hlsearch                " highlight search 
 set incsearch               " incremental search
-set tabstop=4               " number of columns occupied by a tab 
+set tabstop=4               " number of columns occupied by a tab
 set softtabstop=4           " see multiple spaces as tabstops so <BS> does the right thing
 set expandtab               " converts tabs to white space
 set shiftwidth=4            " width for autoindents
@@ -57,7 +64,9 @@ Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 
 " autosave plugin
 Plug 'okuuva/auto-save.nvim'
+
 call plug#end()
+
 " plugin specific customisation
 
 " theme
