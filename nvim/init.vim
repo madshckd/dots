@@ -8,6 +8,8 @@
 " plugin manager used : vim-plug
 " download vim-plug and place it in /usr/share/nvim/runtime/autoload directory
 
+" dependencies : python-nvim, nodejs, gopls, bash-language-server (available via pacman for arch systems)
+
 " if you're trying to setup user specific configuration then remove the path in call plug#begin() function
 " if you have administrator access then, leave it as it is
 
@@ -45,7 +47,7 @@ filetype plugin indent on   " allow auto-indenting depending on file type
 call plug#begin('/usr/share/nvim/runtime/autoload')
 
 " nord theme plugin
-Plug 'shaunsingh/nord.nvim'     
+" Plug 'shaunsingh/nord.nvim'     
 
 " snippets
 Plug 'honza/vim-snippets'
@@ -165,6 +167,11 @@ require('lspconfig')['html'].setup {
 
 -- golang lspconfig
 require('lspconfig')['gopls'].setup {
+    capabilities = capabilities
+}
+
+-- bashls lspconfig
+require('lspconfig')['bashls'].setup {
     capabilities = capabilities
 }
 
