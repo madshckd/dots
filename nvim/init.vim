@@ -1,14 +1,16 @@
 " This line makes pacman-installed global Arch Linux vim packages work.
 " source /usr/share/nvim/archlinux.vim
 
+" This is a system-wide neovim configuration, so administrator permission is required
+
 " custom rules and specifications (not too shabby but it is minimal and working for me ofcourse)
-" minimal ide setup for go programming
+" minimal ide setup for go and c programming and also for some scripting
 " carefully handpicked by z31a
 
 " plugin manager used : vim-plug
 " download vim-plug and place it in /usr/share/nvim/runtime/autoload directory
 
-" dependencies : python-nvim, nodejs, gopls, bash-language-server (available via pacman for arch systems)
+" dependencies : python-nvim, nodejs, gopls, clang, bash-language-server (available via pacman for arch systems)
 
 " if you're trying to setup user specific configuration then remove the path in call plug#begin() function
 " if you have administrator access then, leave it as it is
@@ -54,7 +56,10 @@ Plug 'honza/vim-snippets'
 Plug 'SirVer/ultisnips'
 
 " lsp configuration plugin
-Plug 'neovim/nvim-lspconfig'    
+Plug 'neovim/nvim-lspconfig'
+
+" NerdTree
+Plug 'preservim/nerdtree'
 
 " autocompletion setup
 Plug 'hrsh7th/nvim-cmp'
@@ -94,6 +99,7 @@ local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 lspconfig.gopls.setup{}         -- go language lsp server from google
+lspconfig.clangd.setup{}        -- c language lsp server (clangd)
 
 -- lspconfig ends
 
@@ -167,6 +173,11 @@ require('lspconfig')['html'].setup {
 
 -- golang lspconfig
 require('lspconfig')['gopls'].setup {
+    capabilities = capabilities
+}
+
+-- clangd lspconfig
+require('lspconfig')['clangd'].setup {
     capabilities = capabilities
 }
 
