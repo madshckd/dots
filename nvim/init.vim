@@ -1,16 +1,14 @@
 " This line makes pacman-installed global Arch Linux vim packages work.
 " source /usr/share/nvim/archlinux.vim
 
-" This is a system-wide neovim configuration, so administrator permission is required
+" This is a neovim system wide configuration, so administrator permission is required
 
 " custom rules and specifications (not too shabby but it is minimal and working for me ofcourse)
-" minimal ide setup for go and c programming and also for some scripting
+" minimal ide setup for go and c programming
 " carefully handpicked by z31a
 
 " plugin manager used : vim-plug
 " download vim-plug and place it in /usr/share/nvim/runtime/autoload directory
-
-" dependencies : python-nvim, nodejs, gopls, clang, bash-language-server (available via pacman for arch systems)
 
 " if you're trying to setup user specific configuration then remove the path in call plug#begin() function
 " if you have administrator access then, leave it as it is
@@ -56,7 +54,7 @@ Plug 'honza/vim-snippets'
 Plug 'SirVer/ultisnips'
 
 " lsp configuration plugin
-Plug 'neovim/nvim-lspconfig'
+Plug 'neovim/nvim-lspconfig'    
 
 " NerdTree
 Plug 'preservim/nerdtree'
@@ -69,6 +67,10 @@ Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
 Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 
+" debugger setup
+Plug 'mfussenegger/nvim-dap'
+Plug 'leoluz/nvim-dap-go'
+
 " autosave plugin
 Plug 'okuuva/auto-save.nvim'
 
@@ -77,7 +79,7 @@ call plug#end()
 " plugin specific customisation
 
 " theme
-" colorscheme nord
+"colorscheme nord
 
 " configs written using 'lua'
 " comprises configurations for :
@@ -92,7 +94,7 @@ lua << EOF
 local lspconfig = require('lspconfig')
 
 
-lspconfig.html.setup{}          -- html lsp support from vscode with default js and css support
+-- lspconfig.html.setup{}          -- html lsp support from vscode with default js and css support
 -- enabling completion support via snippets
 -- completion is enabled only when snippet support is enabled.
 local capabilities = vim.lsp.protocol.make_client_capabilities()
@@ -100,6 +102,7 @@ capabilities.textDocument.completion.completionItem.snippetSupport = true
 
 lspconfig.gopls.setup{}         -- go language lsp server from google
 lspconfig.clangd.setup{}        -- c language lsp server (clangd)
+-- lspconfig.pyright.setup{}       -- python language server (python)
 
 -- lspconfig ends
 
@@ -167,9 +170,9 @@ cmp.setup.cmdline(':', {
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
   
 -- html lspconfig
-require('lspconfig')['html'].setup {
-    capabilities = capabilities
-}
+--require('lspconfig')['html'].setup {
+--    capabilities = capabilities
+--}
 
 -- golang lspconfig
 require('lspconfig')['gopls'].setup {
@@ -181,13 +184,24 @@ require('lspconfig')['clangd'].setup {
     capabilities = capabilities
 }
 
+/*
+-- pyright lspconfig
+-- require('lspconfig')['pyright'].setup {
+--    capabilities = capabilities
+--  }
+
+
 -- bashls lspconfig
 require('lspconfig')['bashls'].setup {
     capabilities = capabilities
 }
 
+-- nvim-cmp config ends
+
+-- dap-go config (go adapter for nvim-dap)
+require('dap-go').setup()
+
 -- auto-save plugin
 require('auto-save').setup {}
 
--- nvim-cmp config ends
 EOF
