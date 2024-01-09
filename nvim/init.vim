@@ -4,11 +4,20 @@
 " This is a neovim system wide configuration, so administrator permission is required
 
 " custom rules and specifications (not too shabby but it is minimal and working for me ofcourse)
-" minimal ide setup for go and c programming
+" minimal ide setup (golang, c, bash, html, python?)
 " carefully handpicked by z31a
 
 " plugin manager used : vim-plug
 " download vim-plug and place it in /usr/share/nvim/runtime/autoload directory
+
+" dependencies : (available via pacman)
+"   + gopls
+"   + clangd
+"   + bash-languageserver
+"   + vscode-html-languageserver
+"   + pyright | python-pyright from pip | python-pynvim
+
+" for makrdown-previw plugin to work properly, call mkdp#ulti#install() after plugin installation
 
 " if you're trying to setup user specific configuration then remove the path in call plug#begin() function
 " if you have administrator access then, leave it as it is
@@ -50,8 +59,8 @@ call plug#begin('/usr/share/nvim/runtime/autoload')
 " Plug 'shaunsingh/nord.nvim'     
 
 " snippets
-Plug 'honza/vim-snippets'
-Plug 'SirVer/ultisnips'
+Plug 'L3MON4D3/LuaSnip'
+Plug 'saadparwaiz1/cmp_luasnip'
 
 " lsp configuration plugin
 Plug 'neovim/nvim-lspconfig'    
@@ -65,7 +74,6 @@ Plug 'hrsh7th/cmp-nvim-lsp'
 Plug 'hrsh7th/cmp-buffer'
 Plug 'hrsh7th/cmp-path'
 Plug 'hrsh7th/cmp-cmdline'
-Plug 'quangnguyen30192/cmp-nvim-ultisnips'
 
 " debugger setup
 Plug 'mfussenegger/nvim-dap'
@@ -74,12 +82,25 @@ Plug 'leoluz/nvim-dap-go'
 " autosave plugin
 Plug 'okuuva/auto-save.nvim'
 
+" markdown-preview plugin
+Plug 'iamcco/markdown-preview.nvim'
+
 call plug#end()
 
 " plugin specific customisation
 
 " theme
 "colorscheme nord
+
+" markdown-preview configs
+let g:mkdp_auto_close = 1
+let g:mkdp_echo_preview_url = 1
+let g:mkdp_browser = 'firefox'
+
+" disabling some providers
+let g:loaded_python3_provider = 0
+let g:loaded_ruby_provider = 0
+let g:loaded_perl_provider = 0
 
 " configs written using 'lua'
 " comprises configurations for :
@@ -94,15 +115,18 @@ lua << EOF
 local lspconfig = require('lspconfig')
 
 
--- lspconfig.html.setup{}          -- html lsp support from vscode with default js and css support
 -- enabling completion support via snippets
 -- completion is enabled only when snippet support is enabled.
 local capabilities = vim.lsp.protocol.make_client_capabilities()
 capabilities.textDocument.completion.completionItem.snippetSupport = true
 
+
+-- enabling lsp's
+lspconfig.html.setup{}          -- html lsp server
 lspconfig.gopls.setup{}         -- go language lsp server from google
 lspconfig.clangd.setup{}        -- c language lsp server (clangd)
--- lspconfig.pyright.setup{}       -- python language server (python)
+lspconfig.bashls.setup{}        -- bash (shell scripting) language server
+--lspconfig.pyright.setup{}       -- python language server (pyright)
 
 -- lspconfig ends
 
@@ -115,8 +139,8 @@ cmp.setup({
     -- snippet engine config
     snippet = {
         expand = function(args)
-            -- using 'ultisnips' as snippet engine
-            vim.fn["UltiSnips#Anon"](args.body)
+            -- using 'luasnip' as snippet engine
+            require('luasnip').lsp_expand(args.body)
         end,
     },
     window = {
@@ -133,7 +157,7 @@ cmp.setup({
     }),
     sources = cmp.config.sources({
         { name = 'nvim_lsp' },
-        { name = 'ultisnips' },
+        { name = 'luasnip' },
     }, {
       { name = 'buffer' },
     })
@@ -170,9 +194,9 @@ cmp.setup.cmdline(':', {
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
   
 -- html lspconfig
---require('lspconfig')['html'].setup {
---    capabilities = capabilities
---}
+require('lspconfig')['html'].setup {
+    capabilities = capabilities
+}
 
 -- golang lspconfig
 require('lspconfig')['gopls'].setup {
@@ -187,8 +211,7 @@ require('lspconfig')['clangd'].setup {
 -- pyright lspconfig
 -- require('lspconfig')['pyright'].setup {
 --    capabilities = capabilities
---  }
-
+--}
 
 -- bashls lspconfig
 require('lspconfig')['bashls'].setup {
